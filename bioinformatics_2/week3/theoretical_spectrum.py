@@ -1,3 +1,5 @@
+import typing
+
 """
 The theoretical spectrum of a cyclic peptide Peptide, denoted Cyclospectrum(Peptide), is the collection of all of the
 masses of its subpeptides, in addition to the mass 0 and the mass of the entire peptide, with masses ordered from 
@@ -52,7 +54,7 @@ def LinearSpectrum(peptide):
     return sorted(lSpectrum)
 
 
-def CyclicSpectrum(peptide):
+def CyclicSpectrum(peptide: str) -> typing.List["int"]:
     massDict = AminoAcidMassDict()
     n = len(peptide)
     PrefixMass = [0]
