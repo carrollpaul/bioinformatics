@@ -59,8 +59,11 @@ def peptide_score(peptide: str, spectrum: typing.List["int"]) -> int:
 
 
 if __name__ == "__main__":
+    """
     with open("C:/Users/Paul/src/bioinformatics/bioinformatics_2/week4/dataset_102_3(1).txt") as f:
         peptide = f.readline().rstrip()
         spectrum = [int(line) for line in f.readline().rstrip().split()]
-
+    """
+    peptide = "MAMA"
+    spectrum = [0, 71, 178, 202, 202, 202, 333, 333, 333, 404, 507, 507]
     print(peptide_score(peptide, spectrum))

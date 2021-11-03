@@ -35,7 +35,7 @@ class LeaderboardCyclopeptideSequencing:
     def __init__(self):
         # self.readSpectrum()
         self.readSpectrumFromFile(
-            "C:/Users/Paul/src/bioinformatics/bioinformatics_2/week4/dataset_102_8(3).txt"
+            "C:/Users/Paul/src/bioinformatics/bioinformatics_2/week4/dataset_102_8(5).txt"
         )
         result = self.calculateSeqList(self.spectrumDict, self.N, version=0)
         with open("C:/Users/Paul/src/bioinformatics/bioinformatics_2/week4/output.txt", "w") as f:
