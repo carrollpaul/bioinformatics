@@ -1,7 +1,4 @@
-import typing
 import os
-from collections import defaultdict
-import networkx as nx
 from networkx.generators.trees import prefix_tree
 
 
