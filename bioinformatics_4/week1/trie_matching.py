@@ -5,6 +5,16 @@ from networkx.generators.trees import prefix_tree
 
 
 def recover_path(node: int, trie: prefix_tree) -> str:
+    """
+    Recover path in trie from node to root.
+
+    Args:
+        node: The node at which to begin backtracking
+        trie: The trie to track
+
+    Returns:
+        The string from node to root
+    """
     for v in trie.predecessors(node):
         prefix = str(trie.nodes[node]["source"])
         while v != 0:
@@ -14,6 +24,18 @@ def recover_path(node: int, trie: prefix_tree) -> str:
 
 
 def prefix_trie_matching(text: str, trie: prefix_tree, node: int = 0):
+    """
+    Check if prefix of text exists in trie.
+
+    Args:
+        text: The text to check against the trie
+        trie: Trie to use for checking
+        node: The node in the trie at which to begin
+
+    Returns:
+        None if prefix does not appear in trie, otherwise returns
+        the string recovered from that branch in trie.
+    """
     if list(trie.successors(node)) == [-1]:
         return recover_path(node, trie)
 
@@ -27,7 +49,17 @@ def prefix_trie_matching(text: str, trie: prefix_tree, node: int = 0):
             return prefix_trie_matching(text, trie, node)
 
 
-def trie_matching(text: str, trie: prefix_tree) -> typing.List["int"]:
+def trie_matching(text: str, trie: prefix_tree) -> typing.Dict["str", typing.List["int"]]:
+    """
+    Check all prefixes of text against trie.
+
+    Args:
+        text: String to evaluate
+        trie: Trie used to evaluate text
+
+    Returns:
+        A dictionary with prefix keys and list of indices in text at which keys appear.
+    """
     index = 0
     matches = defaultdict(list)
     while True:
@@ -48,7 +80,6 @@ if __name__ == "__main__":
 
     # patterns = ["ATCG", "GGGT"]
     # text = "AATCGGGTTCAATCGGGGT"
-    print(patterns)
     trie = prefix_tree(patterns)
     result = trie_matching(text, trie)
     for key, value in result.items():
