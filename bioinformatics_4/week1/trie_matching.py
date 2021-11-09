@@ -1,4 +1,5 @@
 import typing
+import os
 from collections import defaultdict
 from networkx.generators.trees import prefix_tree
 
@@ -12,15 +13,18 @@ def recover_path(node: int, trie: prefix_tree) -> str:
     return prefix
 
 
-def prefix_trie_matching(text: str, trie: prefix_tree, source: int = 0):
-    if list(trie.successors(source)) == [-1]:
-        return recover_path(source, trie)
+def prefix_trie_matching(text: str, trie: prefix_tree, node: int = 0):
+    if list(trie.successors(node)) == [-1]:
+        return recover_path(node, trie)
 
-    for child in list(trie.successors(source)):
+    if len(text) == 0:
+        return None
+
+    for child in list(trie.successors(node)):
         if text[0] == trie.nodes[child]["source"]:
-            source = child
+            node = child
             text = text[1:]
-            return prefix_trie_matching(text, trie, source)
+            return prefix_trie_matching(text, trie, node)
 
 
 def trie_matching(text: str, trie: prefix_tree) -> typing.List["int"]:
@@ -36,7 +40,17 @@ def trie_matching(text: str, trie: prefix_tree) -> typing.List["int"]:
 
 
 if __name__ == "__main__":
-    patterns = ["ATCG", "GGGT"]
-    text = "AATCGGGTTCAATCGGGGT"
+    base = os.path.dirname(__file__)
+    with open(f"{base}/dataset_294_8(2).txt") as f:
+        lines = f.readlines()
+        text = lines[0].strip()
+        patterns = lines[1].strip().split()
+
+    # patterns = ["ATCG", "GGGT"]
+    # text = "AATCGGGTTCAATCGGGGT"
+    print(patterns)
     trie = prefix_tree(patterns)
-    print(trie_matching(text, trie))
+    result = trie_matching(text, trie)
+    for key, value in result.items():
+        suffix = " ".join(str(val) for val in value)
+        print(f"{key}: {suffix}")
