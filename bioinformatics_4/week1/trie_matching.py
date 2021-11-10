@@ -1,10 +1,10 @@
 import typing
 import os
 from collections import defaultdict
-from networkx.generators.trees import prefix_tree
+import networkx as nx
 
 
-def recover_path(node: int, trie: prefix_tree) -> str:
+def recover_path(node: int, trie: nx.prefix_tree) -> str:
     """
     Recover path in trie from node to root.
 
@@ -23,7 +23,7 @@ def recover_path(node: int, trie: prefix_tree) -> str:
     return prefix
 
 
-def prefix_trie_matching(text: str, trie: prefix_tree, node: int = 0):
+def prefix_trie_matching(text: str, trie: nx.prefix_tree, node: int = 0):
     """
     Check if prefix of text exists in trie.
 
@@ -49,7 +49,7 @@ def prefix_trie_matching(text: str, trie: prefix_tree, node: int = 0):
             return prefix_trie_matching(text, trie, node)
 
 
-def trie_matching(text: str, trie: prefix_tree) -> typing.Dict["str", typing.List["int"]]:
+def trie_matching(text: str, trie: nx.prefix_tree) -> typing.Dict["str", typing.List["int"]]:
     """
     Check all prefixes of text against trie.
 
@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     # patterns = ["ATCG", "GGGT"]
     # text = "AATCGGGTTCAATCGGGGT"
-    trie = prefix_tree(patterns)
+    trie = nx.prefix_tree(patterns)
     result = trie_matching(text, trie)
     for key, value in result.items():
         suffix = " ".join(str(val) for val in value)
