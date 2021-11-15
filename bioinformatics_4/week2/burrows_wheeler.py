@@ -1,5 +1,6 @@
-from collections import Counter, defaultdict
+from collections import defaultdict
 import typing
+import os
 
 
 def burrows_wheeler(text: str) -> str:
@@ -113,7 +114,18 @@ def bw_matching(text: str, pattern: str) -> int:
 
 
 if __name__ == "__main__":
-    text = "TCCTCTATGAGATCCTATTCTATGAAACCTTCA$GACCAAAATTCTCCGGC"
-    patterns = ["CCT", "CAC", "GAG", "CAG", "ATC"]
+    # text = "TCCTCTATGAGATCCTATTCTATGAAACCTTCA$GACCAAAATTCTCCGGC"
+    # patterns = ["CCT", "CAC", "GAG", "CAG", "ATC"]
+
+    script_dir = os.path.dirname(__file__)
+    with open(f"{script_dir}/dataset_300_8(1).txt") as f:
+        lines = f.readlines()
+        text = lines[0].strip()
+        patterns = lines[1].split()
+
+    ans = []
     for pat in patterns:
-        print(bw_matching(text, pat))
+        ans.append(bw_matching(text, pat))
+
+    with open(f"{script_dir}/output.txt", "w") as f:
+        f.write(" ".join(str(i) for i in ans))
