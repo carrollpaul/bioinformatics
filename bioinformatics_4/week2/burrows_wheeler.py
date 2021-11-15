@@ -4,6 +4,8 @@ import os
 
 
 def burrows_wheeler(text: str) -> str:
+    if text[-1] != "$":
+        text = text + "$"
     original = text
     table = [original]
     ans = ""
@@ -17,7 +19,7 @@ def burrows_wheeler(text: str) -> str:
         table.append(new)
         text = new
 
-    return "".join(val[-1] for val in sorted(table)), sorted(table)
+    return "".join(val[-1] for val in sorted(table))
 
 
 def index_column(col: typing.List["int"], first: bool = True) -> typing.Dict["str", "int"]:
@@ -70,7 +72,7 @@ def last_to_first(first_col: str, last_col: str) -> int:
     return d
 
 
-def bw_matching(text: str, pattern: str) -> int:
+def bw_matching(text: str, pattern: str, suffix_arr: typing.List["int"]) -> int:
     """
     Count number of occurances of pattern in Burrows-Wheeler inverted string of text.
 
@@ -90,6 +92,8 @@ def bw_matching(text: str, pattern: str) -> int:
 
     top = 0
     bottom = len(first_col)
+    indices = defaultdict(list)
+    original_pattern = pattern
     while True:
         if pattern:
             # Pop last char in pattern
@@ -110,22 +114,52 @@ def bw_matching(text: str, pattern: str) -> int:
                 # No matches
                 return 0
         else:
-            return bottom - top + 1
+            for i in range(top, bottom + 1):
+                indices[original_pattern].append(suffix_arr[i])
+            return indices
+
+
+def suffix_array(text: str) -> typing.List["int"]:
+    """
+    Return a list of indices in lexigraphical order of all suffixes in text, starting with $.
+    """
+    if text[-1] != "$":
+        text = text + "$"
+    suffixes = {text[-i:]: len(text) - i for i in range(1, len(text) + 1)}
+    indices = []
+    sorted_keys = sorted(list(suffixes.keys()))
+    for key in sorted_keys:
+        indices.append(suffixes.get(key))
+    return indices
 
 
 if __name__ == "__main__":
-    # text = "TCCTCTATGAGATCCTATTCTATGAAACCTTCA$GACCAAAATTCTCCGGC"
-    # patterns = ["CCT", "CAC", "GAG", "CAG", "ATC"]
-
+    # raw = "AATCGGGTTCAATCGGGGT"
+    # text = burrows_wheeler(raw)
+    # patterns = ["ATCG", "GGGT"]
+    """
     script_dir = os.path.dirname(__file__)
-    with open(f"{script_dir}/dataset_300_8(1).txt") as f:
+
+    with open(f"{script_dir}/dataset_303_4(2).txt") as f:
         lines = f.readlines()
         text = lines[0].strip()
         patterns = lines[1].split()
 
+    suffix_arr = suffix_array(text)
     ans = []
-    for pat in patterns:
-        ans.append(bw_matching(text, pat))
-
     with open(f"{script_dir}/output.txt", "w") as f:
-        f.write(" ".join(str(i) for i in ans))
+        for pat in patterns:
+            indices = bw_matching(text, pat, suffix_arr)
+            if indices != 0:
+                # ans.append(indices)
+                kmer = list(indices.keys())[0]
+                index = " ".join(str(x) for x in list(indices.values())[0])
+                f.write(f"{kmer}: {index}\n")
+
+        for x in ans:
+            kmer = list(x.keys())[0]
+            index = " ".join(str(x) for x in list(x.values())[0])
+            f.write(f"{kmer}: {index}\n")
+    """
+
+    print(burrows_wheeler_inversion("G$CAGCTAGGG"))
